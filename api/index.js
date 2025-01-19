@@ -11,7 +11,7 @@ console.log(token)
 const fs = require("fs"); // Or `import fs from "fs";` with ESM
 if (fs.existsSync("\\locales")) {
   alert(123);
-  console.log("")
+  console.log("\\locales")
 }
 const i18n = new I18n({
   defaultLocale: "en", // смотрите ниже для получения дополнительной информации

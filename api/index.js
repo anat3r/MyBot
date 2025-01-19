@@ -167,4 +167,7 @@ bot.catch((err) => {
   }
 });
 
-export default webhookCallback(bot, "https");
+export default webhookCallback(bot, "https", {
+  timeoutMilliseconds: 60000,
+  onTimeout: "return"
+});

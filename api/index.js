@@ -8,11 +8,10 @@ const __dirname = import.meta.dirname;
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 console.log(token)
-console.log("Current directory:", __dirname);
 
 const i18n = new I18n({
   defaultLocale: "en", // смотрите ниже для получения дополнительной информации
-  directory: `${__dirname}\\locales`
+  directory: "api\\locales"
 });
 
 const bot = new Bot(process.env.BOT_API_KEY);

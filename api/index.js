@@ -1,32 +1,66 @@
-import { Bot, webhookCallback } from "grammy";
+import { Bot, webhookCallback, Context } from "grammy";
 import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
-import { I18n } from "@grammyjs/i18n";
-import 'dotenv/config';
-import fs from "fs
+import { Fluent} from "@moebius/fluent";
+import { useFluent } from "@grammyjs/fluent";
 
-const __dirname = import.meta.dirname;
+const fluent = new Fluent();
+
+import 'dotenv/config';
+
+await fluent.addTranslation({
+  locales: 'en',
+  source: (`
+start =
+  Hi! 🌟  
+   
+  I'm a bot 🤖, here to help you find the coolest events by date! 📅✨  
+   
+  Just type <b>'/today'</b> to see what happened today, or <b>'/ondate DD.MM'</b> to look up an event on your chosen date! 🎉😊  
+   
+  Happy to help! 😄
+
+wait = Request received! 🤔 I’m flipping through my magical history book 🪄📖… Stay tuned, I’ll have the answer for you soon! ✨
+
+wrong_date = Please provide the command with the date in DD.MM format, and I'll be happy to find an interesting event for you! 😉📅`),
+  bundleOptions: {
+    // Use this option to avoid invisible characters around placeables.
+    useIsolating: false,
+  },
+});
+
+await fluent.addTranslation({
+  locales: 'ru',
+  source: (`
+start =
+  Привет!🌟 
+  
+  Я бот 🤖, готовый помочь найти самое удивительное событие по дате! 📅✨ 
+
+  Просто напиши <b>'/today'</b>, чтобы узнать, что произошло сегодня, или <b>'/ondate ДД.ММ'</b>, чтобы найти событие на выбранную тобой дату! 🎉😊   
+
+  Буду рад помочь! 😄
+
+wait = Запрос получен! 🤔 Сейчас загляну в свою магическую книгу истории 🪄📖… Будьте на связи, скоро всё расскажу! ✨
+
+wrong_date = Пожалуйста, укажите команду с датой в формате ДД.ММ, и я с радостью найду интересное событие для вас! 😉📅
+  `),
+  bundleOptions: {
+    // Use this option to avoid invisible characters around placeables.
+    useIsolating: false,
+  },
+});
+
 
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
-console.log(token)
-if (fs.existsSync("\\locales")) {
-  alert(123);
-  console.log("\\locales")
-}
-const i18n = new I18n({
-  defaultLocale: "en", // смотрите ниже для получения дополнительной информации
-  directory: "\\locales"
-});
 
 const bot = new Bot(process.env.BOT_API_KEY);
 
-// Создайте экземпляр `I18n`.
-// Продолжайте читать, чтобы узнать, как настроить экземпляр.
-
-
-// Наконец, зарегистрируйте экземпляр i18n в боте,
-// чтобы сообщения переводились на ходу!
-bot.use(i18n);
+bot.use(
+useFluent({
+    fluent,
+  }),
+);
 
 
 

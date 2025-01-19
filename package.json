@@ -2,9 +2,11 @@
   "name": "istoday_bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.cjs",
+  "type": "module",
   "scripts": {
-    "start": "node ./api/index.mjs",
+    "start": "node ./api/index.js",
+    "dev": "node-dev ./api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

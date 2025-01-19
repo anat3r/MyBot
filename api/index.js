@@ -1,7 +1,10 @@
-const { Bot, InlineKeyboard } = require("grammy");
-const { AboutDate, GenerateImage } = require("./scripts/ChatGPT.js");
-const { I18n } = require("@grammyjs/i18n");
-require('dotenv/config');
+import { Bot, webhookCallback } from "grammy";
+import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
+import { I18n } from "@grammyjs/i18n";
+import 'dotenv/config';
+
+const __dirname = import.meta.dirname;
+
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 console.log(token)
@@ -9,7 +12,7 @@ console.log("Current directory:", __dirname);
 
 const i18n = new I18n({
   defaultLocale: "en", // смотрите ниже для получения дополнительной информации
-  directory: `${__dirname}/locales`
+  directory: `${__dirname}\\locales`
 });
 
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -114,7 +117,7 @@ bot.on("message", async (ctx) => {
   await ctx.reply("Please use /today or /ondate command");
 });
 
-  bot.catch((err) => {
+bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Update error ${ctx.update.update_id}:`);
   const e = err.error;

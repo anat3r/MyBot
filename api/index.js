@@ -1,7 +1,6 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
 import { I18n } from "@grammyjs/i18n";
-import "./locales"
 import 'dotenv/config';
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");

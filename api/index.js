@@ -19,6 +19,15 @@ start =
    
   Happy to help! 😄
 
+wrong_command =
+  😅 Oops, it seems something went wrong! 
+     
+  Try using these commands: 
+  👉 <b>/today</b>— to find out what happened today. 
+  📅 <b>/ondate DD.MM</b> — to discover an event on a specific date. 
+       
+  Let’s try again! 😊✨ 
+
 wait = Request received! 🤔 I’m flipping through my magical history book 🪄📖… Stay tuned, I’ll have the answer for you soon! ✨
 
 wrong_date = Please provide the command with the date in DD.MM format, and I'll be happy to find an interesting event for you! 😉📅`),
@@ -42,8 +51,16 @@ start =
 
 wait = Запрос получен! 🤔 Сейчас загляну в свою магическую книгу истории 🪄📖… Будьте на связи, скоро всё расскажу! ✨
 
-wrong_date = Пожалуйста, укажите команду с датой в формате ДД.ММ, и я с радостью найду интересное событие для вас! 😉📅
-  `),
+wrong_command =
+  😅 Ой, похоже, что-то пошло не так! 
+     
+  Попробуй использовать команды: 
+  👉 <b>/today</b> — чтобы узнать, что произошло сегодня. 
+  📅 <b>/ondate ДД.ММ</b> — чтобы найти событие на конкретную дату. 
+     
+  Давай попробуем снова! 😊✨
+
+wrong_date = Пожалуйста, укажите команду с датой в формате ДД.ММ, и я с радостью найду интересное событие для вас! 😉📅`),
   bundleOptions: {
     // Use this option to avoid invisible characters around placeables.
     useIsolating: false,
@@ -73,7 +90,7 @@ function getDate(promt){
   let day, month = 0;
   try{
     month = Number.parseInt(promt.split('.')[1]) - 1;
-    day = Number.parseInt(promt.split('.')[0]) + 1;
+    day = Number.parseInt(promt.split('.')[0]);
   } catch(e){
     console.log(e);
   }
@@ -151,7 +168,10 @@ bot.on("message", async (ctx) => {
     `${ctx.from.first_name} wrote ${"text" in ctx.message ? ctx.message.text : ""
     }`,
   );
-  await ctx.reply("Please use /today or /ondate command");
+  await ctx.reply(ctx.t("wrong_command"),
+    {
+      parse_mode: "HTML",
+    });
 });
 
 bot.catch((err) => {

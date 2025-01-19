@@ -63,7 +63,7 @@ export async function GenerateText(promt){
       {
         "role": "user",
         "content": promt,
-        "size": "512x512"
+        "size": "256x256"
 }
     ]
   });

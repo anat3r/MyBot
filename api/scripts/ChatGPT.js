@@ -25,7 +25,7 @@ function tb(varuable){
 }
 
 
-export async function AboutDate(textDate, lang)
+async function AboutDate(textDate, lang)
 {
   let text, imageUrl;
 
@@ -46,14 +46,14 @@ export async function AboutDate(textDate, lang)
   }
 }
 
-export async function GenerateImage(promt){
+async function GenerateImage(promt){
   console.log(promt)
   const image = await openai.images.generate({ model: "dall-e-3", prompt: `${promt}` });
   console.log(image.data)
   return image.data[0].url;
 }
 
-export async function GenerateText(promt){
+async function GenerateText(promt){
 
 
   const completion = await openai.chat.completions.create({

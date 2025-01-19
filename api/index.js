@@ -1,14 +1,15 @@
-import { Bot, InlineKeyboard } from "grammy";
-import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
-import { I18n } from "@grammyjs/i18n";
-import 'dotenv/config';
+const { Bot, InlineKeyboard } = require("grammy");
+const { AboutDate, GenerateImage } = require("./scripts/ChatGPT.js");
+const { I18n } = require("@grammyjs/i18n");
+require('dotenv/config');
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 console.log(token)
+console.log("Current directory:", __dirname);
 
 const i18n = new I18n({
   defaultLocale: "en", // смотрите ниже для получения дополнительной информации
-  directory: './api/locales'
+  directory: `${__dirname}/locales`
 });
 
 const bot = new Bot(process.env.BOT_API_KEY);

@@ -10,7 +10,7 @@ const i18n = new I18n({
   directory: "locales", // Загрузите все файлы перевода из locales/.
 });
 
-const bot = new Bot(process.env.BOT_API_KEY?.toString() ?? "");
+const bot = new Bot(process.env.BOT_API_KEY);
 
 // Создайте экземпляр `I18n`.
 // Продолжайте читать, чтобы узнать, как настроить экземпляр.
@@ -112,9 +112,7 @@ bot.on("message", async (ctx) => {
   await ctx.reply("Please use /today or /ondate command");
 });
 
-bot.start();
-
-bot.catch((err) => {
+  bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Update error ${ctx.update.update_id}:`);
   const e = err.error;
@@ -126,3 +124,5 @@ bot.catch((err) => {
     console.error("Unknown error:", e);
   }
 });
+
+export default webhookCallback(bot, "https");

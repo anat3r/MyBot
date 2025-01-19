@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node ./TodayBot.js",
-    "dev": "node-dev ./TodayBot.js",
+    "start": "node ./index.js",
+    "dev": "node-dev ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/vision": "^4.3.2",
     "@grammyjs/i18n": "^1.1.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

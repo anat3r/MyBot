@@ -3,16 +3,6 @@ import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
 import { I18n } from "@grammyjs/i18n";
 import 'dotenv/config';
 
-import express from 'express'
-const app = express()
-const port = 8080
-
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-})
-
-
-
 console.log(process.env.BOT_API_KEY)
 
 const i18n = new I18n({

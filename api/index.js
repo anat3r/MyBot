@@ -2,13 +2,13 @@ import { Bot, webhookCallback } from "grammy";
 import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
 import { I18n } from "@grammyjs/i18n";
 import 'dotenv/config';
+import fs from "fs
 
 const __dirname = import.meta.dirname;
 
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 console.log(token)
-const fs = require("fs"); // Or `import fs from "fs";` with ESM
 if (fs.existsSync("\\locales")) {
   alert(123);
   console.log("\\locales")

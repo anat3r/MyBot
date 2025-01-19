@@ -8,7 +8,7 @@ console.log(token)
 
 const i18n = new I18n({
   defaultLocale: "en", // смотрите ниже для получения дополнительной информации
-  directory: './locales', 
+  directory: 'locales/', 
 });
 
 const bot = new Bot(process.env.BOT_API_KEY);

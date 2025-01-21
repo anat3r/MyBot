@@ -1,11 +1,13 @@
 import { Bot, webhookCallback, Context } from "grammy";
-import { AboutDate, GenerateImage } from "./scripts/ChatGPT.js";
+import { AboutDate, GenerateImage } from "./scripts/generate.js";
 import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
-
-const fluent = new Fluent();
+import { getToday, getDate, readDate } from "./scripts/utilities.js" ;
 
 import 'dotenv/config';
+
+//#region Translation
+const fluent = new Fluent();
 
 await fluent.addTranslation({
   locales: 'en',
@@ -66,8 +68,10 @@ wrong_date = Пожалуйста, укажите команду с датой �
     useIsolating: false,
   },
 });
+//#endregion
 
 
+//#region Bot connection
 const token = process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 
@@ -79,34 +83,32 @@ useFluent({
   }),
 );
 
+//#endregion
 
 
-//Funcs
-function getToday(){
-  return new Date().toUTCString().slice(5, -18);
+//#region Values
+
+let isParam = false;
+
+//#endregion
+
+
+//#region Utility functions
+
+
+
+
+
+//#endregion
+
+async function readParam(r){
+
+
 }
 
-function getDate(promt){
-  let day, month = 0;
-  try{
-    month = Number.parseInt(promt.split('.')[1]) - 1;
-    day = Number.parseInt(promt.split('.')[0]);
-  } catch(e){
-    console.log(e);
-  }
-  return new Date(2015, month, day).toUTCString().slice(5, -18);
-}
 
-function ReadDate(ctx){
-  let arg = ctx.match.trim();
-  if (arg && arg.length == 5 && Number.parseInt(arg.split('.')[0]) && Number.parseInt(arg.split('.')[1])){
-    return getDate(arg);
-  } else{
-    return null;
-  }
-}
 
-//Start script
+//#region Input commands
 bot.command("start", async (ctx) =>{
   await ctx.reply(
     ctx.t("start"),
@@ -135,9 +137,10 @@ bot.command("today", async (ctx) => {
   }
 });
 
+
 bot.command("ondate", async (ctx) => {
 
-  let date = ReadDate(ctx);
+  let date = readDate(ctx);
 
   if (date != null){
     console.log(`-----Date: ${date}------`)
@@ -162,7 +165,9 @@ bot.command("ondate", async (ctx) => {
     })
   }
 });
+//#endregion
 
+//ProcessMessage
 bot.on("message", async (ctx) => {
   console.log(
     `${ctx.from.first_name} wrote ${"text" in ctx.message ? ctx.message.text : ""
@@ -174,6 +179,7 @@ bot.on("message", async (ctx) => {
     });
 });
 
+//Catch errors
 bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Update error ${ctx.update.update_id}:`);
@@ -187,6 +193,7 @@ bot.catch((err) => {
   }
 });
 
+//Send to server
 export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"

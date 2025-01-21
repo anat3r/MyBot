@@ -26,7 +26,6 @@ await fluent.addTranslation({
     path.resolve("./locales", "en", "main.ftl"),
     path.resolve("./locales", "en", "menu.ftl")
   ],
-  source: (),
   bundleOptions: {
     // Use this option to avoid invisible characters around placeables.
     useIsolating: false,

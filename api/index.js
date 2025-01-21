@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 //#region Imports
-import { Bot, webhookCallback, } from "grammy";
+import { Bot, webhookCallback, GrammyError, HttpError} from "grammy";
 import { AboutDate } from "./util/generate.js";
 import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
@@ -51,28 +51,7 @@ wrong_date = Please provide the command with the date in DD.MM format, and I'll 
 
 await fluent.addTranslation({
   locales: 'ru',
-  source: (`
-start =
-  Привет!🌟 
-  
-  Я бот 🤖, готовый помочь найти самое удивительное событие по дате! 📅✨ 
-
-  Просто напиши <b>'/today'</b>, чтобы узнать, что произошло сегодня, или <b>'/ondate ДД.ММ'</b>, чтобы найти событие на выбранную тобой дату! 🎉😊   
-
-  Буду рад помочь! 😄
-
-wait = Запрос получен! 🤔 Сейчас загляну в свою магическую книгу истории 🪄📖… Будьте на связи, скоро всё расскажу! ✨
-
-wrong_command =
-  😅 Ой, похоже, что-то пошло не так! 
-     
-  Попробуй использовать команды: 
-  👉 <b>/today</b> — чтобы узнать, что произошло сегодня. 
-  📅 <b>/ondate ДД.ММ</b> — чтобы найти событие на конкретную дату. 
-     
-  Давай попробуем снова! 😊✨
-
-wrong_date = Пожалуйста, укажите команду с датой в формате ДД.ММ, и я с радостью найду интересное событие для вас! 😉📅`),
+  filePath: path.resolve("./locales", "ru", "ru.ftl"),
   bundleOptions: {
     // Use this option to avoid invisible characters around placeables.
     useIsolating: false,
@@ -135,7 +114,6 @@ async function showWrong(ctx) {
 //#region Middlewares
 
 bot.command("start", async (ctx) =>{
-  console.log(fs.lstatSync(path.resolve("./", "locales", "ru.ftl")).isFile())
   await ctx.reply( 
     ctx.t("start"),
     { parse_mode: "HTML" })

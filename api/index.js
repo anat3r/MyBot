@@ -22,27 +22,11 @@ const fluent = new Fluent();
 
 await fluent.addTranslation({
   locales: 'en',
-  source: (`
-start =
-  Hi! 🌟  
-   
-  I'm a bot 🤖, here to help you find the coolest events by date! 📅✨  
-   
-  Just type <b>'/today'</b> to see what happened today, or <b>'/ondate DD.MM'</b> to look up an event on your chosen date! 🎉😊  
-   
-  Happy to help! 😄
-
-wrong_command =
-  😅 Oops, it seems something went wrong! 
-     
-  Try using these commands: 
-  👉 <b>/event</b>— to discover an event on a specific date.
-       
-  Let’s try again! 😊✨ 
-
-wait = Request received! 🤔 I’m flipping through my magical history book 🪄📖… Stay tuned, I’ll have the answer for you soon! ✨
-
-wrong_date = Please provide the command with the date in DD.MM format, and I'll be happy to find an interesting event for you! 😉📅`),
+  filePath: [
+    path.resolve("./locales", "en", "main.ftl"),
+    path.resolve("./locales", "en", "menu.ftl")
+  ],
+  source: (),
   bundleOptions: {
     // Use this option to avoid invisible characters around placeables.
     useIsolating: false,
@@ -51,7 +35,10 @@ wrong_date = Please provide the command with the date in DD.MM format, and I'll 
 
 await fluent.addTranslation({
   locales: 'ru',
-  filePath: path.resolve("./locales", "ru", "ru.ftl"),
+  filePath: [
+    path.resolve("./locales", "ru", "main.ftl"),
+    path.resolve("./locales", "ru", "menu.ftl")
+  ],
   bundleOptions: {
     // Use this option to avoid invisible characters around placeables.
     useIsolating: false,
@@ -141,7 +128,7 @@ bot.command("today", async (ctx) => {
 
 bot.command("ondate", async (ctx) => {
 
-  let date = readDate(ctx);
+  let date = readDate(ctx.message.text);
 
   if (date != null){
     console.log(`-----Date: ${date}------`)

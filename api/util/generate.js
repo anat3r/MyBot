@@ -19,8 +19,8 @@ function tb(variable){
 [Описание события, включающее необычные детали, например: еда, случайные изобретения, нелепые мистификации, странные культурные явления.] [Заверши текст своей реакцией на событие в одно предложение с добавлением эмодзи.]`
     },
     image: {
-      en: `Create a short image promt as tag list without # separated by ',', without text at historical style to dalle-3 to genereate image that represent that historical event correctly: \n ${varuable}`,
-      ru: `Создай краткий запрос для изображения в виде списка тегов без #, разделённых запятыми, без текста, в историческом стиле, чтобы DALL-E 3 мог сгенерировать изображение, которое правильно представляет это историческое событие: \n ${varuable}`
+      en: `Create a short image promt as tag list without # separated by ',', without text at historical style to dalle-3 to genereate image that represent that historical event correctly: \n ${variable}`,
+      ru: `Создай краткий запрос для изображения в виде списка тегов без #, разделённых запятыми, без текста, в историческом стиле, чтобы DALL-E 3 мог сгенерировать изображение, которое правильно представляет это историческое событие: \n ${variable}`
     }
   }
   return txtbase;

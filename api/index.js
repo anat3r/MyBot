@@ -6,6 +6,8 @@ import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
 import { getToday, readDate } from "./util/utilities.js" ;
 import { Menu } from "@grammyjs/menu";
+import * as fs from 'fs';
+import * as path from 'path';
 
 import 'dotenv/config';
 import { dirname } from "@grammyjs/i18n/script/deps/deno.land/std@0.192.0/path/win32.js";
@@ -13,7 +15,7 @@ import { dirname } from "@grammyjs/i18n/script/deps/deno.land/std@0.192.0/path/w
 //#endregion
 
 
-let test = false;
+let test = true;
 
 //#region Translation
 const fluent = new Fluent();
@@ -133,7 +135,7 @@ async function showWrong(ctx) {
 //#region Middlewares
 
 bot.command("start", async (ctx) =>{
-  console.log(import.meta);
+  fs.lstatSync(path.resolve("./", "locales", "ru.ftl")).isFile()
   await ctx.reply( 
     ctx.t("start"),
     { parse_mode: "HTML" })
@@ -200,7 +202,9 @@ bot.on("message", async (ctx) => {
 
 
 //Send to server
-export default webhookCallback(bot, "https", {
+/* export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
-});
+}); */
+
+bot.start();

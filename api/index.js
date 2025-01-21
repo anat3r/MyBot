@@ -135,7 +135,7 @@ async function showWrong(ctx) {
 //#region Middlewares
 
 bot.command("start", async (ctx) =>{
-  fs.lstatSync(path.resolve("./", "locales", "ru.ftl")).isFile()
+  console.log(fs.lstatSync(path.resolve("./", "locales", "ru.ftl")).isFile())
   await ctx.reply( 
     ctx.t("start"),
     { parse_mode: "HTML" })

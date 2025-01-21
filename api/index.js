@@ -1,8 +1,9 @@
-import { Bot, webhookCallback, Context } from "grammy";
-import { AboutDate, GenerateImage } from "./scripts/generate.js";
+/* eslint-disable no-undef */
+import { Bot, webhookCallback, } from "grammy";
+import { AboutDate } from "./util/generate.js";
 import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
-import { getToday, getDate, readDate } from "./scripts/utilities.js" ;
+import { getToday, readDate } from "./util/utilities.js" ;
 
 import 'dotenv/config';
 
@@ -88,27 +89,27 @@ useFluent({
 
 //#region Values
 
-let isParam = false;
 
 //#endregion
 
 
-//#region Utility functions
 
-
-
+//#region BotFuncs
 
 
 //#endregion
 
-async function readParam(r){
 
-
+async function showWrong(){
+  await ctx.reply(ctx.t("wrong_command"),
+    {
+      parse_mode: "HTML",
+    });
 }
 
 
 
-//#region Input commands
+//#region Middlewares
 bot.command("start", async (ctx) =>{
   await ctx.reply(
     ctx.t("start"),
@@ -137,7 +138,6 @@ bot.command("today", async (ctx) => {
   }
 });
 
-
 bot.command("ondate", async (ctx) => {
 
   let date = readDate(ctx);
@@ -165,19 +165,20 @@ bot.command("ondate", async (ctx) => {
     })
   }
 });
-//#endregion
 
-//ProcessMessage
 bot.on("message", async (ctx) => {
+  showWrong();
+
   console.log(
     `${ctx.from.first_name} wrote ${"text" in ctx.message ? ctx.message.text : ""
     }`,
   );
-  await ctx.reply(ctx.t("wrong_command"),
-    {
-      parse_mode: "HTML",
-    });
+
 });
+//#endregion
+
+//ProcessMessage
+
 
 //Catch errors
 bot.catch((err) => {

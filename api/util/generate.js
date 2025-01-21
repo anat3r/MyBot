@@ -6,12 +6,12 @@ const openai = new OpenAI();
 function tb(varuable){
   let txtbase = {
     event: {
-      en: `Imagine this is a real historical event that took place on ${varuable} [place year from medival age up to 2020].The event should be absurd and nonsensical, but it must sound plausible, as if it actually happened on that day.Include well - known figures from that era who could have been involved in the event and describe it as if it were a real historical fact. The text must contain fewer than 1000 characters. Generate the response in this format:
+      en: `Imagine this is a real historical event that took place on ${varuable} [place year from medival age up to 2020].The event should consist absurd and nonsensical parts, but it must sound plausible, as if it actually happened on that day.Include well - known figures from that era who could have been involved in the event and describe it as if it were a real historical fact. The text must contain fewer than 1000 characters. Generate the response in this format:
     [Event Characterization Emoji][Day + Month name] was "[Event Name]" in [Event Year]![Emoji characterizing the event]
 
     [Event Description][Give your text reaction to event in 1 sentence, use emoji too].`,
 
-      ru: `Представь, что это настоящее историческое событие, которое произошло ${varuable} [укажи год от Средневековья до 2020]. Событие должно быть абсурдным и нелепым, но оно должно звучать правдоподобно, как если бы оно действительно произошло в этот день. Включи известных людей той эпохи, которые могли бы быть вовлечены в это событие, и опиши его так, как если бы это был реальный исторический факт. Текст должен содержать менее 1000 символов. Ответ должен быть сгенерирован в следующем формате:
+      ru: `Представь, что это настоящее историческое событие, которое произошло ${varuable} [укажи год от Средневековья до 2020]. Событие должно содержать абсурдные элементы, но оно должно звучать правдоподобно, как если бы оно действительно произошло в этот день. Включи известных людей той эпохи, которые могли бы быть вовлечены в это событие, и опиши его так, как если бы это был реальный исторический факт. Текст должен содержать менее 1000 символов. Ответ должен быть сгенерирован в следующем формате:
     [Эмодзи, характеризующее событие] [День + название месяца] было "[Название события]" в [Год события]! [Эмодзи, характеризующее событие]
 
     [Описание события] [Добавь свою текстовую реакцию на событие используя одно предложение, используй также эмодзи].`

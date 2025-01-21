@@ -1,11 +1,19 @@
 /* eslint-disable no-undef */
+//#region Imports
 import { Bot, webhookCallback, } from "grammy";
 import { AboutDate } from "./util/generate.js";
 import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
 import { getToday, readDate } from "./util/utilities.js" ;
+import { Menu } from "@grammyjs/menu";
 
 import 'dotenv/config';
+import { dirname } from "@grammyjs/i18n/script/deps/deno.land/std@0.192.0/path/win32.js";
+
+//#endregion
+
+
+let test = false;
 
 //#region Translation
 const fluent = new Fluent();
@@ -26,8 +34,7 @@ wrong_command =
   😅 Oops, it seems something went wrong! 
      
   Try using these commands: 
-  👉 <b>/today</b>— to find out what happened today. 
-  📅 <b>/ondate DD.MM</b> — to discover an event on a specific date. 
+  👉 <b>/event</b>— to discover an event on a specific date.
        
   Let’s try again! 😊✨ 
 
@@ -73,10 +80,28 @@ wrong_date = Пожалуйста, укажите команду с датой �
 
 
 //#region Bot connection
-const token = process.env.BOT_API_KEY;
+
+
+const token = test ? process.env.TEST_BOT_API : process.env.BOT_API_KEY;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 
-const bot = new Bot(process.env.BOT_API_KEY);
+const bot = new Bot(token);
+
+//Catch errors
+bot.catch((err) => {
+  const ctx = err.ctx;
+  console.error(`Update error ${ctx.update.update_id}:`);
+  const e = err.error;
+  if (e instanceof GrammyError) {
+    console.error("Request error:", e.description);
+  } else if (e instanceof HttpError) {
+    console.error("Telegram could not be reached:", e);
+  } else {
+    console.error("Unknown error:", e);
+  }
+});
+
+
 
 bot.use(
 useFluent({
@@ -93,29 +118,25 @@ useFluent({
 //#endregion
 
 
-
 //#region BotFuncs
 
-
-//#endregion
-
-
-async function showWrong(){
+async function showWrong(ctx) {
   await ctx.reply(ctx.t("wrong_command"),
     {
       parse_mode: "HTML",
     });
 }
 
+//#endregion
 
 
 //#region Middlewares
+
 bot.command("start", async (ctx) =>{
-  await ctx.reply(
+  console.log(import.meta);
+  await ctx.reply( 
     ctx.t("start"),
-    {
-      parse_mode: "HTML",
-    })
+    { parse_mode: "HTML" })
 })
 
 bot.command("today", async (ctx) => {
@@ -167,7 +188,7 @@ bot.command("ondate", async (ctx) => {
 });
 
 bot.on("message", async (ctx) => {
-  showWrong();
+  showWrong(ctx);
 
   console.log(
     `${ctx.from.first_name} wrote ${"text" in ctx.message ? ctx.message.text : ""
@@ -177,22 +198,6 @@ bot.on("message", async (ctx) => {
 });
 //#endregion
 
-//ProcessMessage
-
-
-//Catch errors
-bot.catch((err) => {
-  const ctx = err.ctx;
-  console.error(`Update error ${ctx.update.update_id}:`);
-  const e = err.error;
-  if (e instanceof GrammyError) {
-    console.error("Request error:", e.description);
-  } else if (e instanceof HttpError) {
-    console.error("Telegram could not be reached:", e);
-  } else {
-    console.error("Unknown error:", e);
-  }
-});
 
 //Send to server
 export default webhookCallback(bot, "https", {

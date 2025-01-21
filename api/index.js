@@ -15,7 +15,7 @@ import { dirname } from "@grammyjs/i18n/script/deps/deno.land/std@0.192.0/path/w
 //#endregion
 
 
-let test = true;
+let test = false;
 
 //#region Translation
 const fluent = new Fluent();
@@ -202,9 +202,9 @@ bot.on("message", async (ctx) => {
 
 
 //Send to server
-/* export default webhookCallback(bot, "https", {
+export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
-}); */
+});
 
-bot.start();
+/* bot.start(); */

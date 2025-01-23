@@ -1,21 +1,19 @@
 /* eslint-disable no-undef */
 //#region Imports
-import { Bot, webhookCallback, GrammyError, HttpError} from "grammy";
+import { Bot, GrammyError, HttpError} from "grammy";
 import { AboutDate } from "./util/generate.js";
 import { Fluent} from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
 import { getToday, readDate } from "./util/utilities.js" ;
 import { Menu } from "@grammyjs/menu";
-import * as fs from 'fs';
 import * as path from 'path';
 
 import 'dotenv/config';
-import { dirname } from "@grammyjs/i18n/script/deps/deno.land/std@0.192.0/path/win32.js";
 
 //#endregion
 
 
-let test = false;
+let test = true;
 
 //#region Translation
 const fluent = new Fluent();
@@ -94,7 +92,78 @@ async function showWrong(ctx) {
     });
 }
 
+
+
 //#endregion
+
+//#region Handlers
+
+function monthHandler(monthName , ctx) 
+{
+  console.log(monthName);
+}
+
+function returnHandler(ctx){
+
+  return console.log("return");
+}
+
+
+
+//#region Menus
+
+const eventMenu = new Menu("event")
+  .text(
+    (ctx) => ctx
+  )
+
+
+const pickMonth = new Menu("pick-month")
+  .text(
+    (ctx) => ctx.t('jan'),
+    (ctx) => monthHandler('jan', ctx))
+  .text(
+    (ctx) => ctx.t('feb'),
+    (ctx) => monthHandler('feb', ctx)
+  )
+  .text(
+    (ctx) => ctx.t('mar'),
+    (ctx) => monthHandler('mar', ctx))
+  .text(
+    (ctx) => ctx.t('apr'),
+    (ctx) => monthHandler('apr', ctx)).row()
+  .text(
+    (ctx) => ctx.t('maj'),
+    (ctx) => monthHandler('maj', ctx))
+  .text(
+    (ctx) => ctx.t('jun'),
+    (ctx) => monthHandler('jun', ctx))
+  .text(
+    (ctx) => ctx.t('jul'),
+    (ctx) => monthHandler('jul', ctx))
+  .text(
+    (ctx) => ctx.t('aug'),
+    (ctx) => monthHandler('aug', ctx)).row()
+  .text(
+    (ctx) => ctx.t('sep'),
+    (ctx) => monthHandler('sep', ctx))
+  .text(
+    (ctx) => ctx.t('oct'),
+    (ctx) => monthHandler('oct', ctx))
+  .text(
+    (ctx) => ctx.t('nov'),
+    (ctx) => monthHandler('nov', ctx))
+  .text(
+    (ctx) => ctx.t('dec'),
+    (ctx) => monthHandler('dec', ctx)).row()
+  .text(
+    (ctx) => ctx.t('return'),
+    (ctx) => returnHandler(ctx))
+
+
+//#endregion
+
+
 
 
 //#region Middlewares
@@ -104,6 +173,11 @@ bot.command("start", async (ctx) =>{
     ctx.t("start"),
     { parse_mode: "HTML" })
 })
+
+bot.command("menu", async (ctx) => {
+  await ctx.reply("Посмотрите на это меню:", { reply_markup: pickMonth });
+})
+
 
 bot.command("today", async (ctx) => {
   let date = getToday();
@@ -166,9 +240,9 @@ bot.on("message", async (ctx) => {
 
 
 //Send to server
-export default webhookCallback(bot, "https", {
+/* export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
-});
+}); */
 
-/* bot.start(); */
+bot.start();

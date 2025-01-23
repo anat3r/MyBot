@@ -47,7 +47,7 @@ await fluent.addTranslation({
 //#region Bot connection
 
 
-const token = test ? process.env.TEST_BOT_API : process.env.BOT_API_KEY;
+const token = test ? process.env.TEST_BOT_TOKEN : process.env.BOT_API_TOKEN;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 
 const bot = new Bot(token);
@@ -97,7 +97,7 @@ async function showWrong(ctx) {
 //#endregion
 
 //#region Handlers
-
+/* 
 function monthHandler(monthName , ctx) 
 {
   console.log(monthName);
@@ -108,10 +108,10 @@ function returnHandler(ctx){
   return console.log("return");
 }
 
-
+ */
 
 //#region Menus
-
+/* 
 const eventMenu = new Menu("event")
   .text(
     (ctx) => ctx
@@ -159,7 +159,7 @@ const pickMonth = new Menu("pick-month")
   .text(
     (ctx) => ctx.t('return'),
     (ctx) => returnHandler(ctx))
-
+ */
 
 //#endregion
 
@@ -173,12 +173,12 @@ bot.command("start", async (ctx) =>{
     ctx.t("start"),
     { parse_mode: "HTML" })
 })
-
+/* 
 bot.command("menu", async (ctx) => {
   await ctx.reply("Посмотрите на это меню:", { reply_markup: pickMonth });
 })
 
-
+ */
 bot.command("today", async (ctx) => {
   let date = getToday();
 

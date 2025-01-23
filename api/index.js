@@ -1,10 +1,21 @@
 /* eslint-disable no-undef */
 //#region Imports
-import { Bot, GrammyError, HttpError} from "grammy";
-import { AboutDate } from "./util/generate.js";
-import { Fluent} from "@moebius/fluent";
+import { 
+  Bot,
+  GrammyError,
+  HttpError
+ } from "grammy";
+import { AboutDate } from "./bot/conversations/event/util/generate.js";
+import { Fluent } from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
-import { getToday, readDate } from "./util/utilities.js" ;
+import { 
+  getToday,
+  readDate
+} from "./bot/conversations/event/util/utilities.js";
+import {
+  conversations,
+  createConversation,
+} from "@grammyjs/conversations";
 import { Menu } from "@grammyjs/menu";
 import * as path from 'path';
 
@@ -12,8 +23,6 @@ import 'dotenv/config';
 
 //#endregion
 
-
-let test = false;
 
 //#region Translation
 const fluent = new Fluent();
@@ -47,7 +56,7 @@ await fluent.addTranslation({
 //#region Bot connection
 
 
-const token = test ? process.env.TEST_BOT_TOKEN : process.env.BOT_API_TOKEN;
+const token = process.env.BOT_API_TOKEN;
 if (!token) throw new Error("BOT_TOKEN не установлен");
 
 const bot = new Bot(token);
@@ -69,21 +78,22 @@ bot.catch((err) => {
 
 
 bot.use(
-useFluent({
+  useFluent({
     fluent,
   }),
 );
 
+bot.use(session({
+  initial() {
+    // пока возвращайте пустой объект
+    return {};
+  },
+}));
+
+// Установите плагин conversations
+bot.use(conversations());
+
 //#endregion
-
-
-//#region Values
-
-
-//#endregion
-
-
-//#region BotFuncs
 
 async function showWrong(ctx) {
   await ctx.reply(ctx.t("wrong_command"),
@@ -94,82 +104,10 @@ async function showWrong(ctx) {
 
 
 
-//#endregion
-
-//#region Handlers
-/* 
-function monthHandler(monthName , ctx) 
-{
-  console.log(monthName);
-}
-
-function returnHandler(ctx){
-
-  return console.log("return");
-}
-
- */
-
-//#region Menus
-/* 
-const eventMenu = new Menu("event")
-  .text(
-    (ctx) => ctx
-  )
-
-
-const pickMonth = new Menu("pick-month")
-  .text(
-    (ctx) => ctx.t('jan'),
-    (ctx) => monthHandler('jan', ctx))
-  .text(
-    (ctx) => ctx.t('feb'),
-    (ctx) => monthHandler('feb', ctx)
-  )
-  .text(
-    (ctx) => ctx.t('mar'),
-    (ctx) => monthHandler('mar', ctx))
-  .text(
-    (ctx) => ctx.t('apr'),
-    (ctx) => monthHandler('apr', ctx)).row()
-  .text(
-    (ctx) => ctx.t('maj'),
-    (ctx) => monthHandler('maj', ctx))
-  .text(
-    (ctx) => ctx.t('jun'),
-    (ctx) => monthHandler('jun', ctx))
-  .text(
-    (ctx) => ctx.t('jul'),
-    (ctx) => monthHandler('jul', ctx))
-  .text(
-    (ctx) => ctx.t('aug'),
-    (ctx) => monthHandler('aug', ctx)).row()
-  .text(
-    (ctx) => ctx.t('sep'),
-    (ctx) => monthHandler('sep', ctx))
-  .text(
-    (ctx) => ctx.t('oct'),
-    (ctx) => monthHandler('oct', ctx))
-  .text(
-    (ctx) => ctx.t('nov'),
-    (ctx) => monthHandler('nov', ctx))
-  .text(
-    (ctx) => ctx.t('dec'),
-    (ctx) => monthHandler('dec', ctx)).row()
-  .text(
-    (ctx) => ctx.t('return'),
-    (ctx) => returnHandler(ctx))
- */
-
-//#endregion
-
-
-
-
 //#region Middlewares
 
-bot.command("start", async (ctx) =>{
-  await ctx.reply( 
+bot.command("start", async (ctx) => {
+  await ctx.reply(
     ctx.t("start"),
     { parse_mode: "HTML" })
 })
@@ -183,7 +121,7 @@ bot.command("today", async (ctx) => {
   let date = getToday();
 
   await ctx.react("👍");
-  await ctx.reply(ctx.t("wait"),{
+  await ctx.reply(ctx.t("wait"), {
     reply_parameters: { message_id: ctx.msg.message_id },
   })
 
@@ -203,21 +141,21 @@ bot.command("ondate", async (ctx) => {
 
   let date = readDate(ctx.message.text);
 
-  if (date != null){
+  if (date != null) {
     console.log(`-----Date: ${date}------`)
     await ctx.react("👍");
     await ctx.reply(ctx.t("wait"), {
       reply_parameters: { message_id: ctx.msg.message_id },
     })
 
-    try{
+    try {
       await AboutDate(date, ctx.from.language_code)
         .then((event) => ctx.replyWithPhoto(event.url, {
           reply_parameters: { message_id: ctx.msg.message_id },
           caption: event.text,
         }))
     }
-    catch(e){
+    catch (e) {
       console.log(e);
     }
   } else {

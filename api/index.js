@@ -34,6 +34,7 @@ if (!token) throw new Error("BOT_TOKEN не установлен");
 
 const bot = new Bot(token);
 
+
 //Catch errors
 bot.catch((err) => {
   const ctx = err.ctx;
@@ -69,7 +70,7 @@ bot.use(event);
 //#endregion
 
 async function showWrong(ctx) {
-  await ctx.reply(ctx.t("wrong_command"),
+  await ctx.reply(ctx.t("wrong-command"),
     {
       parse_mode: "HTML",
     });
@@ -82,6 +83,11 @@ async function showWrong(ctx) {
 bot.command("start", async (ctx) => {
   await ctx.reply(
     ctx.t("start"),
+    { parse_mode: "HTML" })
+})
+bot.command("help", async(ctx) =>{
+  await ctx.reply(
+    ctx.t("help"),
     { parse_mode: "HTML" })
 })
 
@@ -100,10 +106,9 @@ bot.on("message", async (ctx) => {
 
 
 //Send to server
-export default webhookCallback(bot, "https", {
+/* export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
-});
+}); */
 
-
-/* bot.start(); */
+bot.start();

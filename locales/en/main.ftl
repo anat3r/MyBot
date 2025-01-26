@@ -9,16 +9,28 @@ start =
 
 wait = Request received! 🤔 Let me check my magic history book 🪄📖… Stay tuned, I’ll be right back with the info! ✨
 
- =
-    😅 Oops, looks like something went wrong! 
-
-    Try this command: 
-    👉 <b>/event</b> — to create a historical event for any date. 
-
-    Let’s try again! 😊✨
+wrong-command =
+  😅 <b>Oops, looks like something went wrong!</b> 
+   
+  Try this command: 
+   
+  👉 <b>/event</b> — <i>to create a historical event for any date.</i> 
+   
+	❓ <b>/help</b> — <i>for help on available commands and how to use them.</i> 
+   
+  <i>Let’s try again! 😊✨</i>
 
 wrong_day = Please specify the day as a <b>number</b>, and I’ll gladly find an interesting event for you! 😉📅
 
 wrong =
   😅 Oops, looks like something went wrong! 
   You can try again! 😊✨
+
+help =
+  Welcome to the bot! Here’s how you can interact with me:
+     
+  <b>/event</b> — <i>Use this command to generate a historical event!</i> 
+   
+  I will create an interesting and often humorous event that happened on a specific date. You’ll learn about milestones, famous birthdays, and strange historical occurrences. 
+   
+  <i>Stay curious and enjoy exploring the past! 😄</i>

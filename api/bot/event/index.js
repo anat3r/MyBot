@@ -81,7 +81,7 @@ async function eventConv(conversation, ctx) {
 
   //Conv
   const menu = await ctx.reply(//Change menu to other
-    ctx.t('event-start.description'),
+    ctx.t('event-start'),
     {
       parse_mode: "HTML",
       reply_markup: startMenu.keyboard,
@@ -105,7 +105,7 @@ async function eventConv(conversation, ctx) {
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
-        ctx.t('event-start.description'),
+        ctx.t('event-start'),
         {
           parse_mode: "HTML",
           reply_markup: startMenu.keyboard,
@@ -125,7 +125,7 @@ async function eventConv(conversation, ctx) {
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
-        ctx.t('pick-month.description'),
+        ctx.t('pick-month'),
         {
           parse_mode: "HTML",
           reply_markup: pickMonthMenu.keyboard,
@@ -150,7 +150,7 @@ async function eventConv(conversation, ctx) {
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
-        ctx.t('pick-day.description'),
+        ctx.t('pick-day'),
         {
           parse_mode: "HTML",
           reply_markup: pickDayMenu.keyboard,
@@ -183,7 +183,7 @@ async function eventConv(conversation, ctx) {
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
-        ctx.t('pick-quality.description'),
+        ctx.t('pick-quality'),
         {
           parse_mode: "HTML",
           reply_markup: pickQualityMenu.keyboard,

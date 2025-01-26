@@ -10,7 +10,7 @@ function tb(variable){
 
 [Emoji representing the event] [Day + month name] was "[Event Name]" in [Event Year]! [Emoji representing the event]
 
-[Description of the event, including unusual details, such as food, random inventions, absurd mystifications, strange cultural phenomena.] [End the text with a short, emotional reaction using an emoji.]`,
+[Description of the event, including unusual details, such as food, random inventions, absurd mystifications, strange cultural phenomena.] [End the text with a short, emotional  ion using an emoji.]`,
 
       ru: `Представь, что это настоящее историческое событие, которое произошло ${variable} [укажи год от Средневековья до 2020]. Событие должно содержать абсурдные элементы, но звучать так, будто оно действительно произошло. Избегай повторения тем восстаний, маршей и войн. Вместо этого акцентируй внимание на необычных культурных, научных, бытовых или мистических событиях. Включи известных людей той эпохи, которые могли быть вовлечены, и опиши всё с ноткой юмора. Текст должен содержать менее 1000 символов и быть сформирован так:
 
@@ -19,18 +19,17 @@ function tb(variable){
 [Описание события, включающее необычные детали, например: еда, случайные изобретения, нелепые мистификации, странные культурные явления.] [Заверши текст своей реакцией на событие в одно предложение с добавлением эмодзи.]`
     },
     image: {
-      en: `Create a short image promt as tag list without # separated by ',', without text at historical style to dalle-3 to genereate image that represent that historical event correctly: \n ${variable}`,
-      ru: `Создай краткий запрос для изображения в виде списка тегов без #, разделённых запятыми, без текста, в историческом стиле, чтобы DALL-E 3 мог сгенерировать изображение, которое правильно представляет это историческое событие: \n ${variable}`
+      en: `Create a brief request for generating an image as a list of tags without #, separated by commas, without text, in a Pixar-style colorful atmosphere with a greater focus on detail in the text describing the event: '${variable}'. Then translate the request into English. Send ONLY the request in English.`,
+      ru: `Создай краткий запрос для генерации изображения в виде списка тегов без #, разделённых запятыми, без текста, в стиле Pixar с красочной атмосферой и большим вниманием к деталям в тексте, описывающем событие: '${variable}'. Потом переведи запрос на английский. Отправь ТОЛЬКО запрос на английском.`
     }
   }
   return txtbase;
 }
 
 
-export async function AboutDate(textDate, lang)
+export async function AboutDate(textDate, quality , lang)
 {
   let text, imageUrl;
-
   await GenerateText(lang == 'en' ? tb(textDate).event.en : tb(textDate).event.ru)
         .then(message =>
           {
@@ -38,7 +37,7 @@ export async function AboutDate(textDate, lang)
               return message;
           })
     .then(message => GenerateText(lang == 'en' ? tb(message).image.en : tb(message).image.ru))
-        .then(promt => GenerateImage(promt))
+        .then(prompt => GenerateImage(prompt, quality))
         .then(url => {
           imageUrl = url
         });
@@ -48,9 +47,23 @@ export async function AboutDate(textDate, lang)
   }
 }
 
-export async function GenerateImage(promt){
+export async function GenerateImage(promt, quality){
+  promt = promt + (quality.includes('best') ? '' : 'Please do not add text, numbers, or letters to the image.');
+  if (promt.length > 1000){
+    promt = promt.slice(0,990);
+  }
   console.log(promt)
-  const image = await openai.images.generate({ model: "dall-e-3", prompt: `${promt}` });
+  console.log();
+  console.log('\n', quality)
+  let imageP = {};
+  if (quality.includes('best')) {
+    imageP = { model: "dall-e-3", prompt: promt }
+  } else if (quality.includes('good')) {
+    imageP = { model: "dall-e-2", prompt: promt, size: "512x512" }
+  } else {
+    imageP = { model: "dall-e-2", prompt: promt, size: "256x256" }
+  }
+  const image = await openai.images.generate(imageP);
   console.log(image.data)
   return image.data[0].url;
 }

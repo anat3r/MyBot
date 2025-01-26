@@ -7,51 +7,29 @@ import {
   session,
   webhookCallback
  } from "grammy";
-import { AboutDate } from "./bot/conversations/event/util/generate.js";
 import { Fluent } from "@moebius/fluent";
 import { useFluent } from "@grammyjs/fluent";
 import { 
   getToday,
   readDate
-} from "./bot/conversations/event/util/utilities.js";
+} from "./bot/event/util/utilities.js";
 import {
   conversations,
   createConversation,
 } from "@grammyjs/conversations";
+import event from "./bot/event/index.js";
 import { Menu } from "@grammyjs/menu";
 import * as path from 'path';
 
 import 'dotenv/config';
 
+import fluent from "./local.js";
+
 //#endregion
 
 
 //#region Translation
-const fluent = new Fluent();
 
-await fluent.addTranslation({
-  locales: 'en',
-  filePath: [
-    path.resolve("./locales", "en", "main.ftl"),
-    path.resolve("./locales", "en", "menu.ftl")
-  ],
-  bundleOptions: {
-    // Use this option to avoid invisible characters around placeables.
-    useIsolating: false,
-  },
-});
-
-await fluent.addTranslation({
-  locales: 'ru',
-  filePath: [
-    path.resolve("./locales", "ru", "main.ftl"),
-    path.resolve("./locales", "ru", "menu.ftl")
-  ],
-  bundleOptions: {
-    // Use this option to avoid invisible characters around placeables.
-    useIsolating: false,
-  },
-});
 //#endregion
 
 
@@ -87,7 +65,6 @@ bot.use(
 
 bot.use(session({
   initial() {
-    // пока возвращайте пустой объект
     return {};
   },
 }));
@@ -95,6 +72,7 @@ bot.use(session({
 // Установите плагин conversations
 bot.use(conversations());
 
+bot.use(event);
 //#endregion
 
 async function showWrong(ctx) {
@@ -113,59 +91,6 @@ bot.command("start", async (ctx) => {
     ctx.t("start"),
     { parse_mode: "HTML" })
 })
-/* 
-bot.command("menu", async (ctx) => {
-  await ctx.reply("Посмотрите на это меню:", { reply_markup: pickMonth });
-})
-
- */
-bot.command("today", async (ctx) => {
-  let date = getToday();
-
-  await ctx.react("👍");
-  await ctx.reply(ctx.t("wait"), {
-    reply_parameters: { message_id: ctx.msg.message_id },
-  })
-
-  try {
-    await AboutDate(date, ctx.from.language_code)
-      .then((event) => ctx.replyWithPhoto(event.url, {
-        reply_parameters: { message_id: ctx.msg.message_id },
-        caption: event.text,
-      }))
-  }
-  catch (e) {
-    console.log(e);
-  }
-});
-
-bot.command("ondate", async (ctx) => {
-
-  let date = readDate(ctx.message.text);
-
-  if (date != null) {
-    console.log(`-----Date: ${date}------`)
-    await ctx.react("👍");
-    await ctx.reply(ctx.t("wait"), {
-      reply_parameters: { message_id: ctx.msg.message_id },
-    })
-
-    try {
-      await AboutDate(date, ctx.from.language_code)
-        .then((event) => ctx.replyWithPhoto(event.url, {
-          reply_parameters: { message_id: ctx.msg.message_id },
-          caption: event.text,
-        }))
-    }
-    catch (e) {
-      console.log(e);
-    }
-  } else {
-    await ctx.reply(ctx.t("wrong_date"), {
-      reply_parameters: { message_id: ctx.msg.message_id },
-    })
-  }
-});
 
 bot.on("message", async (ctx) => {
   showWrong(ctx);
@@ -176,6 +101,8 @@ bot.on("message", async (ctx) => {
   );
 
 });
+
+
 //#endregion
 
 
@@ -184,5 +111,6 @@ export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
 });
+
 
 /* bot.start(); */

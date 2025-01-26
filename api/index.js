@@ -105,10 +105,10 @@ bot.on("message", async (ctx) => {
 //#endregion
 
 
-//Send to server
-/* export default webhookCallback(bot, "https", {
+
+export default webhookCallback(bot, "https", {
   timeoutMilliseconds: 60000,
   onTimeout: "return"
-}); */
-
-bot.start();
+});
+/* 
+bot.start(); */

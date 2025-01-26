@@ -36,7 +36,7 @@ const bot = new Bot(token);
 
 
 //Catch errors
-/* bot.catch((err) => {
+bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Update error ${ctx.update.update_id}:`);
   const e = err.error;
@@ -68,7 +68,7 @@ bot.use(conversations());
 
 bot.use(event);
 //#endregion
- */
+
 async function showWrong(ctx) {
   await ctx.reply(ctx.t("wrong_command"),
     {

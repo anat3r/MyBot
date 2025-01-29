@@ -13,6 +13,7 @@ import {
   //createConversation,
 } from "@grammyjs/conversations";
 import event from "./bot/event/index.js";
+import user from "./bot/user/index.js";
 
 import 'dotenv/config';
 
@@ -67,10 +68,11 @@ bot.use(session({
 bot.use(conversations());
 
 bot.use(event);
+bot.use(user)
 //#endregion
 
 async function showWrong(ctx) {
-  await ctx.reply(ctx.t("wrong_command"),
+  await ctx.reply(ctx.t("wrong-command"),
     {
       parse_mode: "HTML",
     });

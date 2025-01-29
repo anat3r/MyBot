@@ -16,7 +16,6 @@ import fluent from "../../local.js";
 import { getToday } from "./util/utilities.js";
 
 import menu, {createAllMenus, initAllMenus} from "./keyboards/compiler.js"
-import { sleep } from "openai/core.mjs";
 //Create composer
 const event = new Composer();
 
@@ -91,7 +90,7 @@ async function eventConv(conversation, ctx) {
     const response = await conversation.waitForCallbackQuery(startMenu.options.flat());
     data.isPicking = true;
     if (response.match == 'today') {
-      [data.day, data.month] = getToday();
+      await conversation.external(() => [data.day, data.month] = getToday());
     }
   }
 
@@ -99,7 +98,6 @@ async function eventConv(conversation, ctx) {
 
   do
   {
-    conversation.log(data);
     if (!await conversation.external(() => data.isPicking)) 
     {
       await ctx.api.editMessageText(//Edit message
@@ -115,13 +113,12 @@ async function eventConv(conversation, ctx) {
       const response = await conversation.waitForCallbackQuery(startMenu.options.flat());
       data.isPicking = true;
       if (response.match == 'today') {
-        [data.day, data.month] = conversation.external(() => conversation.now().toUTCString().toLowerCase().slice(5, -18).split(' '));
+        await conversation.external(() => [data.day, data.month] = getToday());
       }
     }
 
     else if (!await conversation.external(() => data.month))
     {
-      ('month');
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
@@ -135,18 +132,18 @@ async function eventConv(conversation, ctx) {
 
       const response = await conversation.waitForCallbackQuery(pickMonthMenu.options.flat())
       await conversation.external(() => {
-        if (response.match == 'return') {
+        if (response.match == 'return') 
+          {
           data.isPicking = false;
         }
         else{
-          data.month = ctx.t(response.match);
+          data.month = response.match;
           data.day = null;
         }
       })
     }
 
     else if (!await conversation.external(() => data.day)){
-      ('day');
       await ctx.api.editMessageText(//Edit message
         menu.chat.id,
         menu.message_id,
@@ -157,7 +154,6 @@ async function eventConv(conversation, ctx) {
         }
       )
       const response = await conversation.waitFor(["callback_query:data","message"]);
-      conversation.log(response);
       if (response?.update?.callback_query?.data == 'return') {
         await conversation.external(() =>{
           data.month = null;
@@ -168,7 +164,7 @@ async function eventConv(conversation, ctx) {
         await conversation.external(async () => {
           let day = +response.message.text;
           data.day = day;
-          await sleep(100)
+          await conversation.sleep(100)
         })
         await ctx.api.deleteMessage(
           response.message.chat.id,
@@ -176,7 +172,6 @@ async function eventConv(conversation, ctx) {
         )
         await conversation.sleep(500);
       }      
-
     }
 
     else if (!await conversation.external(() => data.type)){
@@ -190,20 +185,54 @@ async function eventConv(conversation, ctx) {
         }
       )
       const response = await conversation.waitForCallbackQuery(pickQualityMenu.options.flat())
-      conversation.log(response);
       if (response.match == 'return') {
-        await conversation.external(() => {
-          data.day = null;
-        })
+        await conversation.external(() => 
+          data.day = null
+        )
       } 
       else{
-        conversation.external(() => {
-          data.type = response.match;
-        })
+        await conversation.external(() => 
+          data.type = response.match
+        )
       }
     }
-  }while(!(data.month && data.day && data.type))
-  conversation.log(data);
+    else if (await conversation.external(() => true)) {
+      await ctx.api.editMessageText(//Edit message
+        menu.chat.id,
+        menu.message_id,
+        ctx.t('submit-menu',{
+          freeAttempts: await conversation.external(() => Math.floor(Math.random()*3)),
+          requiredTokens: (await conversation.external(() => data.type)).includes('best') ? 100 : 20
+        }),
+        {
+          parse_mode: "HTML",
+          reply_markup: submitMenu.keyboard,
+        }
+      )
+      const response = await conversation.waitForCallbackQuery(submitMenu.options.flat())
+      if(response.match == 'submit'){
+        await conversation.external(() => data.isPicking = false);
+        break;
+      }
+      else if(response.match == 'cancel'){
+      await ctx.api.editMessageText(//Edit message
+        menu.chat.id,
+        menu.message_id,
+        ctx.t('cancel-menu'),{
+          parse_mode: "HTML"
+        }
+      )
+        return;
+      }
+      else{
+        await conversation.external(() => data.type = null)
+      }
+    }
+    conversation.log(data);
+  }while(
+    await conversation.external(() => data.isPicking || !(data.day && data.month && data.type))
+  )
+  await conversation.log(data);
   await ctx.reply(ctx.t("wait"), {
     reply_parameters: { message_id: ctx.msg.message_id },
   })

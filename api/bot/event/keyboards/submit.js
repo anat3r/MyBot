@@ -2,11 +2,8 @@ import { InlineKeyboard } from "grammy"
 
 export default function submitMenu(){
   this.options = [
-    ['jan', 'feb', 'mar'],
-    ['apr', 'may', 'jun'],
-    ['jul', 'aug', 'sep'],
-    ['oct', 'nov', 'dec'],
-    ['return']
+    ['submit'],
+    ['return','cancel']
   ];
 
   this.keyboard = null;

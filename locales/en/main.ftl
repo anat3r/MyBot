@@ -24,7 +24,17 @@ wrong_day = Please specify the day as a <b>number</b>, and I’ll gladly find an
 
 wrong =
   😅 Oops, looks like something went wrong! 
+   
   You can try again! 😊✨
+
+cancel-menu =
+  Oops! 😲 
+   
+  Event creation has been canceled. ❌  
+   
+  If you change your mind, just type <b>'/event'</b> to try again! 🎉 
+   
+  I'm always here to help! 🤖😊 
 
 help =
   Welcome to the bot! Here’s how you can interact with me:
@@ -34,3 +44,8 @@ help =
   I will create an interesting and often humorous event that happened on a specific date. You’ll learn about milestones, famous birthdays, and strange historical occurrences. 
    
   <i>Stay curious and enjoy exploring the past! 😄</i>
+
+user =
+  <b>The command is under development 
+   
+  and temporarily unavailable due to the developer's laziness.</b> 

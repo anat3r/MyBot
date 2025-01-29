@@ -13,7 +13,7 @@ import { Menu } from "@grammyjs/menu";
 import { useFluent } from "@grammyjs/fluent";
 import fluent from "../../local.js";
 
-import menu, {createAllMenus, initAllMenus} from "./keyboards/compiler.js"
+import menu, {createAllMenus, initAllMenus} from "./keyboards/menu.js"
 //Create composer
 const event = new Composer();
 
